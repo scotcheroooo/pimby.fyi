@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>scotch.hub — blog admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/assets/css/style.css">
+<style>
+#admin-wrap { max-width: 700px; margin: 0 auto; padding: 20px; }
+textarea { width: 100%; height: 200px; background: #000; color: #00ff00; border: 1px solid #00ff00; font-family: monospace; padding: 8px; box-sizing: border-box; }
+input[type=text] { width: 100%; background: #000; color: #00ff00; border: 1px solid #00ff00; font-family: monospace; padding: 6px; box-sizing: border-box; margin-bottom: 8px; }
+button { background: #000; color: #00ff00; border: 1px solid #00ff00; font-family: monospace; padding: 6px 14px; cursor: pointer; margin: 4px 2px; }
+button:hover { background: #00ff00; color: #000; }
+#blog-list { list-style: none; padding: 0; }
+#blog-list li { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 6px 0; }
+#status { margin-top: 12px; color: #00ff00; }
+.danger { color: #ff4444; border-color: #ff4444; }
+.danger:hover { background: #ff4444; color: #000; }
+#editor { display: none; margin-top: 20px; border-top: 1px solid #00ff00; padding-top: 20px; }
+.hint { color: #888; font-size: 0.9em; margin-top: 4px; }
+</style>
+</head>
+<body class="crt">
+<div id="admin-wrap">
+<h2>&gt;cd blog-admin</h2>
+<h2>&gt;ls blogs/</h2>
+
+<ul id="blog-list"><li>loading...</li></ul>
+
+<br>
+<h2>&gt;new post</h2>
+<div id="editor">
+<input type="hidden" id="edit-old-slug">
+<label>title</label>
+<input type="text" id="edit-title" placeholder="blog title">
+<label>date (YYYY-MM-DD)</label>
+<input type="text" id="edit-date" placeholder="2026-04-28">
+<label>content (blank line = new paragraph)</label>
+<textarea id="edit-content" placeholder="write your blog here... use &lt;a href='url'&gt;link text&lt;/a&gt; to add links"></textarea>
+<div class="hint">tip: use &lt;a href='/guestbook.html'&gt;guest book&lt;/a&gt; for internal links</div>
+<br><br>
+<button onclick="savePost()">save + publish</button>
+<button onclick="cancelEdit()">cancel</button>
+</div>
+<button onclick="newPost()" id="new-btn">&gt; + new post</button>
+
+<div id="status"></div>
+</div>
+
+<script>
+// ---- FILL THIS IN ----
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0eS41o-hUbPIPet4TaT-22bhWiyGwXczzRD5IzwhK75SB2z3iTSJmy30MQAa5CNqB/exec";
+// ----------------------
+
+var editingSlug = null;
+
+function status(msg) {
+document.getElementById("status").innerText = msg;
+}
+
+function loadBlogs() {
+fetch(SCRIPT_URL + "?action=list")
+.then(r => r.json())
+.then(function(slugs) {
+var list = document.getElementById("blog-list");
+if (!slugs.length) { list.innerHTML = "<li>no blogs yet</li>"; return; }
+list.innerHTML = slugs.map(function(slug) {
+return '<li>' +
+'<span>' + slug + '</span>' +
+'<span>' +
+'<button onclick="editPost(\'' + slug + '\')">edit</button>' +
+'<button class="danger" onclick="deletePost(\'' + slug + '\')">delete</button>' +
+'</span>' +
+'</li>';
+}).join("");
+});
+}
+
+function newPost() {
+editingSlug = null;
+document.getElementById("edit-old-slug").value = "";
+document.getElementById("edit-title").value = "";
+document.getElementById("edit-date").value = new Date().toISOString().split("T")[0];
+document.getElementById("edit-content").value = "";
+document.getElementById("editor").style.display = "block";
+document.getElementById("new-btn").style.display = "none";
+}
+
+function editPost(slug) {
+status("loading...");
+fetch(SCRIPT_URL + "?action=get&slug=" + slug)
+.then(r => r.json())
+.then(function(data) {
+editingSlug = slug;
+document.getElementById("edit-old-slug").value = slug;
+document.getElementById("edit-title").value = data.title;
+document.getElementById("edit-date").value = new Date().toISOString().split("T")[0];
+
+// Convert HTML back to editable text with preserved links
+var editableContent = data.content
+.replace(/<p>/g, "")
+.replace(/<\/p>/g, "\n\n")
+.replace(/<br>/g, "\n")
+.trim();
+
+document.getElementById("edit-content").value = editableContent;
+document.getElementById("editor").style.display = "block";
+document.getElementById("new-btn").style.display = "none";
+status("");
+});
+}
+
+function cancelEdit() {
+document.getElementById("editor").style.display = "none";
+document.getElementById("new-btn").style.display = "inline-block";
+editingSlug = null;
+}
+
+function savePost() {
+var title = document.getElementById("edit-title").value.trim();
+var date = document.getElementById("edit-date").value.trim();
+var content = document.getElementById("edit-content").value.trim();
+var oldSlug = document.getElementById("edit-old-slug").value.trim();
+
+if (!title || !date || !content) { status("fill in all fields!"); return; }
+
+status("saving...");
+
+var action = oldSlug ? "edit" : "create";
+
+fetch(SCRIPT_URL, {
+method: "POST",
+body: JSON.stringify({ action: action, title: title, dateRaw: date, content: content, oldSlug: oldSlug })
+})
+.then(r => r.json())
+.then(function(data) {
+if (data.ok) {
+status("published! /blogs/" + data.slug + ".html");
+cancelEdit();
+loadBlogs();
+} else {
+status("error: " + JSON.stringify(data));
+}
+});
+}
+
+function deletePost(slug) {
+if (!confirm("delete " + slug + "? this cannot be undone")) return;
+status("deleting...");
+fetch(SCRIPT_URL + "?action=delete&slug=" + slug)
+.then(r => r.json())
+.then(function(data) {
+if (data.ok) { status("deleted!"); loadBlogs(); }
+else status("error: " + JSON.stringify(data));
+});
+}
+
+loadBlogs();
+</script>
+</body>
+</html>

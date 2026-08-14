@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+    <head><!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M2LG3F9H');</script>
+<!-- End Google Tag Manager -->
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>scotch.hub - guestbook</title>
+        <meta name="description" content="portfolio">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <script src="/assets/js/random.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+      </head>
+
+   <body class="crt"><!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2LG3F9H"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+       
+        <h1 id="title1"></h1>
+        <span id="cursor"><p style="text-align: center;" id="description"></p></span>
+        <br>
+          <div class="title">
+            
+            <div class="badge-marquee badge-marquee--right" data-speed="7" style="padding-top:0px">
+              <div class="badge-track">
+                <div id="banner-placeholder"></div>
+              
+            </div>
+          </div>
+        <div id="main">
+        <br>
+<br>
+<div id="breadcrumbs">
+  ><a href="/">root</a>/<a href="/collections">collections</a>/guestbook</div>
+        <script>
+            var ti = 0;
+            var di = 0;
+            var mbi = 0;
+            var titletxt = 'scotch.hub'; /* The text */
+            var titlespeed = 100; /* The speed/duration of the effect in milliseconds */
+            var desctxt = sentences[Math.floor(Math.random()*sentences.length)];
+            var descspeed = 50; /* The speed/duration of the effect in milliseconds */
+            var rbspeed = 50; /* The speed/duration of the effect in milliseconds */
+            var recentbs = ""; /* The text */
+
+
+            function typeWriter() {
+              if (ti < titletxt.length) {
+                document.getElementById("title1").innerHTML += titletxt.charAt(ti);
+                ti++;
+                setTimeout(typeWriter, titlespeed);
+              }else if (di < desctxt.length) {
+                document.getElementById("description").innerHTML += desctxt.charAt(di);
+                di++;
+                setTimeout(typeWriter, descspeed);
+              }else if (mbi < recentbs.length) {
+                document.getElementById("mbtitle").innerHTML += recentbs.charAt(mbi);
+                mbi++;
+                setTimeout(typeWriter, recentbs);
+              }
+            }
+            console.log("if your readin this, u a nerd. AND GET OUT OF MY CODE WHAT?");
+            window.addEventListener("load", (event) => {typeWriter()});
+        </script>
+        <h2>&gt;cd guestbook</h2>
+<h2>&gt;ls</h2>
+<ul>
+  <div id="c_widget"></div>
+        <script src="/comment-widget.js"></script>
+</ul>
+
+
+        
+        
+
+      </div>
+      <div id="contact">
+    <a href="https://discord.gg/A9hZaJjKem" class="link">discord</a>
+    <a href="https://github.com/scotcheroooo" class="link">github</a>
+    <a href="mailto:scotcherooski@gmail.com" class="link">email</a>
+</div> 
+<br>
+<img id="hit" src="https://88x31.lol/counter4.gif" alt="88x31 - Visitor counter" width="88" height="31" />
+<br>
+      <p style="text-align:center;">&copy; 2026 James Pliley. All rights reserved.</p>
+      
+      <script>
+  fetch('/badges.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('banner-placeholder').innerHTML = data;
+    });
+</script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+ 
+<html>
+    <head><!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M2LG3F9H');</script>
+<!-- End Google Tag Manager -->
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>scotch.hub - gooben</title>
+        <meta name="description" content="portfolio">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <script src="/assets/js/random.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+ 
+<h2>&gt;cd gooben</h2>
+<h2>&gt;ls</h2>
+<h3><a>say hi to my sweet little gooben</a></h3>
+        <div>
+            <h4>if your not nice to gooben i will eat your lungs i am NOT joking (gooben is under maintenece rn so shhh)</h4>
+            <br>
+ 
+            <!-- ═══════════════════════════════════════════ -->
+            <!--            GOOBEN WORLD                     -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div>
+             <a href="https://tamanotchi.world/32756c"><img src="https://tamanotchi.world/i2/32756" alt="It's tamaNOTchi! Click to feed!"></a>
+             <h4>click on gooben to feed him! (goes to the tamaNOTchi website)</h4>
+            </div>
+     
+<div tag="projectcontainer"><div id="hi-gooben"></div></div>
+ 
+ 
+        
+        
+ 
+      <div id="contact">
+    <a href="https://discord.gg/A9hZaJjKem" class="link">discord</a>
+    <a href="https://github.com/scotcheroooo" class="link">github</a>
+    <a href="mailto:scotcherooski@gmail.com" class="link">email</a>
+</div> 
+<br>
+<img id="hit" src="https://88x31.lol/counter4.gif" alt="88x31 - Visitor counter" width="88" height="31" />
+<br>
+      <p style="text-align:center;">&copy; 2026 James Pliley. All rights reserved.</p>
+      
+      <script>
+  fetch('/badges.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('banner-placeholder').innerHTML = data;
+    });
+</script>
+ 
+</div>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--                  GOOBEN SCRIPT                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+// ── SUPABASE CONFIG ──────────────────────────────────────
+const SUPA_URL = 'https://mhjprvcfmipubsrrpotx.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oanBydmNmbWlwdWJzcnJwb3R4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzY0NjQsImV4cCI6MjA5MzA1MjQ2NH0.sXIzAIpv8-a3kovuZKmJ2MJx2Vhgw2uWKExcxr5Jadc';
+ 
+async function supaInsert(player_name, action) {
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/gooben_log`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ player_name, action })
+    });
+  } catch(e) { /* silent fail */ }
+}
+ 
+async function supaFetch() {
+  try {
+    const r = await fetch(
+      `${https://mhjprvcfmipubsrrpotx.supabase.co}/rest/v1/gooben_log?order=created_at.desc&limit=8`,
+      { headers: { 'apikey': sb_publishable_hj3GOF-ByeKDiDEbX3FMxA_gqbtysiE, 'Authorization': `Bearer ${sb_publishable_hj3GOF-ByeKDiDEbX3FMxA_gqbtysiE}` } }
+    );
+    return await r.json();
+  } catch(e) { return []; }
+}
+ 
+// ── PIXEL SPRITES ────────────────────────────────────────
+// Each sprite is a 10×16 grid (scaled 4x → 40×64px)
+// 0=transparent 1=dark(outline) 2=body 3=eye/detail
+const SPR = {
+  idle: [
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [1,2,2,3,2,2,3,2,2,1],
+    [1,2,2,1,2,2,1,2,2,1],
+    [1,2,2,2,2,2,2,2,2,1],
+    [1,2,2,2,1,1,2,2,2,1],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,1,0,0,0,0,1,0,0],
+    [0,0,1,0,0,0,0,1,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  walk: [
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [1,2,2,3,2,2,3,2,2,1],
+    [1,2,2,1,2,2,1,2,2,1],
+    [1,2,2,2,2,2,2,2,2,1],
+    [1,2,2,2,1,1,2,2,2,1],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,1,0,0,0,0,0,0,1,0],
+    [0,0,1,0,0,0,0,1,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  happy: [
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [1,2,1,3,2,2,3,1,2,1],
+    [1,2,2,3,2,2,3,2,2,1],
+    [1,2,2,1,1,1,1,2,2,1],
+    [1,2,2,2,2,2,2,2,2,1],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,1,0,0,0,0,1,0,0],
+    [0,1,0,0,0,0,0,0,1,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  sleep: [
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [1,2,2,2,2,2,2,2,2,1],
+    [1,2,1,1,2,2,1,1,2,1],
+    [1,2,2,2,2,2,2,2,2,1],
+    [1,2,2,2,1,2,2,2,2,1],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,0,1,2,2,2,2,1,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+};
+ 
+// body color inherits from site's CRT green — detect it
+function getCRTColor() {
+  const el = document.body;
+  const c = getComputedStyle(el).color;
+  // fallback green if not readable
+  return c && c !== 'rgba(0, 0, 0, 0)' ? c : '#33ff33';
+}
+ 
+function hexFromCRT() {
+  // We'll draw with a greenish tint matching CRT
+  return { outline: '#003300', body: '#00aa00', eye: '#001a00' };
+}
+ 
+const canvas  = document.getElementById('goobenCanvas');
+const ctx     = canvas.getContext('2d');
+canvas.width  = 40;
+canvas.height = 64;
+ 
+function drawSprite(name) {
+  ctx.clearRect(0, 0, 40, 64);
+  const grid = SPR[name] || SPR.idle;
+  const colors = {
+    0: null,
+    1: '#001800',   // outline / dark
+    2: '#00cc00',   // body (CRT green)
+    3: '#004400',   // eyes
+  };
+  const px = 4;
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[r].length; c++) {
+      const col = colors[grid[r][c]];
+      if (!col) continue;
+      ctx.fillStyle = col;
+      ctx.fillRect(c * px, r * px, px, px);
+    }
+  }
+}
+ 
+// ── FLOOR ────────────────────────────────────────────────
+(function buildFloor() {
+  const line = document.getElementById('floorLine');
+  let s = '';
+  for (let i = 0; i < 42; i++) s += '-';
+  line.textContent = s;
+})();
+ 
+// ── STATE ────────────────────────────────────────────────
+const MAX = 5;
+const state = { hunger: 4, happy: 4, clean: 5, sleeping: false };
+ 
+let curSprite = 'idle';
+let walkDir   = 1;
+let gX        = 20;
+let walkTick  = 0;
+ 
+// ── HEARTS ───────────────────────────────────────────────
+function renderHearts(id, val) {
+  const el = document.getElementById(id);
+  let s = '';
+  for (let i = 0; i < MAX; i++) {
+    if (i < val) s += '<span class="gheart-full">♥</span>';
+    else         s += '<span class="gheart-empty">♡</span>';
+  }
+  el.innerHTML = s;
+}
+ 
+function renderStats() {
+  renderHearts('hungerHearts', state.hunger);
+  renderHearts('happyHearts',  state.happy);
+  renderHearts('cleanHearts',  state.clean);
+}
+ 
+// ── WALK LOOP ─────────────────────────────────────────────
+const screenW   = 320;
+const spriteW   = 40;
+const spriteEl  = document.getElementById('gooben-sprite');
+ 
+function walkStep() {
+  if (state.sleeping) { drawSprite('sleep'); return; }
+ 
+  gX += walkDir * 2;
+  if (gX >= screenW - spriteW - 4) { walkDir = -1; spriteEl.style.transform = 'scaleX(-1)'; }
+  if (gX <= 4)                      { walkDir =  1; spriteEl.style.transform = 'scaleX(1)'; }
+  spriteEl.style.left = gX + 'px';
+ 
+  walkTick++;
+  curSprite = walkTick % 2 === 0 ? 'idle' : 'walk';
+  drawSprite(curSprite);
+}
+ 
+setInterval(walkStep, 350);
+ 
+// stat decay every 20s
+setInterval(() => {
+  if (state.sleeping) return;
+  if (state.hunger > 0) state.hunger--;
+  if (state.happy  > 0) state.happy--;
+  if (state.clean  > 0) state.clean--;
+  document.getElementById('gooben-poop').style.display = state.clean <= 1 ? 'block' : 'none';
+  renderStats();
+}, 20000);
+ 
+// ── PARTICLES ─────────────────────────────────────────────
+function spawnParticle(text) {
+  const scr = document.getElementById('gooben-screen');
+  const p = document.createElement('div');
+  p.className = 'gpx';
+  p.textContent = text;
+  p.style.left   = (30 + Math.random() * 80) + 'px';
+  p.style.bottom = '30px';
+  scr.appendChild(p);
+  setTimeout(() => p.remove(), 1400);
+}
+ 
+// ── HAPPY BURST ───────────────────────────────────────────
+function showHappy() {
+  const prev = curSprite;
+  curSprite = 'happy';
+  drawSprite('happy');
+  spawnParticle('♥');
+  setTimeout(() => { curSprite = 'idle'; drawSprite('idle'); }, 2000);
+}
+ 
+// ── PLAYER NAME ───────────────────────────────────────────
+function getName() {
+  return document.getElementById('playerName').value.trim() || 'anon';
+}
+ 
+// ── LOG (shared via Supabase) ─────────────────────────────
+function renderLog(rows) {
+  const el = document.getElementById('gooben-log');
+  el.innerHTML = '';
+  if (!rows || !rows.length) return;
+  rows.forEach(row => {
+    const d = document.createElement('div');
+    d.className = 'glog-entry';
+    d.innerHTML = `<span class="glog-actor">${escHtml(row.player_name)}</span> <span class="glog-action">${escHtml(row.action)}</span>`;
+    el.appendChild(d);
+  });
+}
+ 
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+ 
+async function refreshLog() {
+  const rows = await supaFetch();
+  renderLog(rows);
+}
+ 
+async function logAction(actionText) {
+  const name = getName();
+  await supaInsert(name, actionText);
+  await refreshLog();
+}
+ 
+// poll every 15 seconds so all visitors see updates
+refreshLog();
+setInterval(refreshLog, 15000);
+ 
+// ── ACTIONS ───────────────────────────────────────────────
+function sleepMsg() { logAction('tried to bother gooben but gooben is SLEEPING'); }
+ 
+function gFeed() {
+  if (state.sleeping) { sleepMsg(); return; }
+  if (state.hunger >= MAX) { logAction('tried to feed gooben but gooben is full!'); return; }
+  state.hunger = Math.min(MAX, state.hunger + 2);
+  state.happy  = Math.min(MAX, state.happy  + 1);
+  renderStats();
+  showHappy();
+  spawnParticle('yum!');
+  logAction('fed gooben! 🍖');
+}
+ 
+function gToggleGames() {
+  const gp = document.getElementById('game-picker');
+  gp.classList.toggle('open');
+}
+ 
+function gPlay(game) {
+  document.getElementById('game-picker').classList.remove('open');
+  if (state.sleeping) { sleepMsg(); return; }
+  state.happy  = Math.min(MAX, state.happy  + 2);
+  state.hunger = Math.max(0,   state.hunger - 1);
+  renderStats();
+  showHappy();
+  spawnParticle('★');
+ 
+  // Lil bounce
+  spriteEl.style.transition = 'bottom 0.15s';
+  spriteEl.style.bottom = '18px';
+  setTimeout(() => { spriteEl.style.bottom = '2px'; }, 150);
+ 
+  logAction(`played ${game} with gooben! 🎮`);
+}
+ 
+function gClean() {
+  if (state.sleeping) { sleepMsg(); return; }
+  state.clean = MAX;
+  document.getElementById('gooben-poop').style.display = 'none';
+  renderStats();
+  showHappy();
+  spawnParticle('✨');
+  logAction('cleaned up after gooben! 🛁');
+}
+ 
+function gSleep() {
+  state.sleeping = !state.sleeping;
+  const zzz = document.getElementById('gooben-zzz');
+  if (state.sleeping) {
+    zzz.style.opacity = '1';
+    drawSprite('sleep');
+    logAction('put gooben to sleep 💤');
+  } else {
+    zzz.style.opacity = '0';
+    state.happy = Math.min(MAX, state.happy + 1);
+    renderStats();
+    drawSprite('idle');
+    logAction('woke gooben up! 🌅');
+  }
+}
+ 
+// ── INIT ──────────────────────────────────────────────────
+renderStats();
+drawSprite('idle');
+</script>
+ 
+</body>
+</html>
+ 
