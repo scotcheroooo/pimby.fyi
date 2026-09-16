@@ -11,17 +11,17 @@
 <style>
 
   :root {
-    --bg-black: #030504;
-    --bg-deep-green: #04140d;
-    --orb-emerald: #22c55e;
-    --orb-neon: #39ff88;
-    --orb-forest: #0f6b45;
-    --glass-fill: rgba(140, 255, 190, 0.05);
-    --glass-fill-hover: rgba(140, 255, 190, 0.09);
-    --glass-rim-bright: rgba(210, 255, 225, 0.6);
-    --glass-rim-dim: rgba(140, 255, 190, 0.04);
-    --text-primary: #eafff2;
-    --text-secondary: #93a89e;
+    --bg-abyss: #020b0f;
+    --bg-deep-teal: #04191f;
+    --glow-cyan: #4df3ff;
+    --glow-magenta: #ff5ec4;
+    --glow-purple: #8b5cf6;
+    --glass-fill: rgba(120, 240, 255, 0.05);
+    --glass-fill-hover: rgba(120, 240, 255, 0.09);
+    --glass-rim-bright: rgba(210, 255, 252, 0.6);
+    --glass-rim-dim: rgba(120, 240, 255, 0.04);
+    --text-primary: #eafcff;
+    --text-secondary: #83abb0;
     --font-face: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
@@ -38,13 +38,15 @@
   body {
     font-family: var(--font-face);
     color: var(--text-primary);
-    background: radial-gradient(ellipse 120% 80% at 50% 0%, var(--bg-deep-green) 0%, var(--bg-black) 65%, #010201 100%);
+    background: radial-gradient(ellipse 120% 80% at 50% 0%, var(--bg-deep-teal) 0%, var(--bg-abyss) 65%, #010304 100%);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
   }
+
+  /* Ambient glow field, the bioluminescent light behind the glass */
 
   .orb-field {
     position: fixed;
@@ -57,53 +59,102 @@
   .orb {
     position: absolute;
     border-radius: 50%;
-    opacity: 0.65;
+    opacity: 0.55;
   }
 
   .orb-1 {
     width: 520px;
     height: 520px;
-    background: radial-gradient(circle, var(--orb-emerald) 0%, transparent 70%);
-    filter: blur(60px);
+    background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
+    filter: blur(70px);
     top: -14%;
-    left: -14%;
-    animation: driftOne 46s ease-in-out infinite;
+    left: -16%;
+    animation: driftOne 46s ease-in-out infinite, pulseGlow 7s ease-in-out infinite;
   }
 
   .orb-2 {
     width: 460px;
     height: 460px;
-    background: radial-gradient(circle, var(--orb-forest) 0%, transparent 70%);
-    filter: blur(60px);
+    background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+    filter: blur(70px);
     bottom: -18%;
     right: -12%;
-    animation: driftTwo 54s ease-in-out infinite;
+    animation: driftTwo 54s ease-in-out infinite, pulseGlow 9s ease-in-out infinite;
   }
 
   .orb-3 {
-    width: 360px;
-    height: 360px;
-    background: radial-gradient(circle, var(--orb-neon) 0%, transparent 70%);
-    filter: blur(70px);
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, var(--glow-magenta) 0%, transparent 70%);
+    filter: blur(75px);
     top: 42%;
     left: 58%;
-    opacity: 0.3;
-    animation: driftThree 60s ease-in-out infinite;
+    opacity: 0.32;
+    animation: driftThree 60s ease-in-out infinite, pulseGlow 8s ease-in-out infinite;
   }
 
   @keyframes driftOne {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(70px, 55px) scale(1.12); }
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(70px, 55px); }
   }
 
   @keyframes driftTwo {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-65px, -45px) scale(1.06); }
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-65px, -45px); }
   }
 
   @keyframes driftThree {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-55px, 35px) scale(0.94); }
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-55px, 35px); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Drifting jellyfish, the literal theme, kept faint and slow in the background */
+
+  .jelly {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .jelly-a {
+    width: 150px;
+    top: 5%;
+    right: 2%;
+    animation: jellyBob 17s ease-in-out infinite;
+  }
+
+  .jelly-b {
+    width: 100px;
+    bottom: 8%;
+    left: 3%;
+    animation: jellyBob 13s ease-in-out infinite reverse;
+  }
+
+  .jelly-c {
+    width: 70px;
+    top: 58%;
+    right: 12%;
+    animation: jellyBob 21s ease-in-out infinite;
+  }
+
+  @keyframes jellyBob {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-26px) rotate(2deg); }
+  }
+
+  .jelly .tentacles {
+    transform-origin: 50% 0%;
+    animation: tentacleSway 4.5s ease-in-out infinite;
+  }
+
+  @keyframes tentacleSway {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
   }
 
   .grain {
@@ -121,7 +172,7 @@
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: radial-gradient(ellipse 90% 70% at 50% 30%, transparent 0%, rgba(2, 5, 3, 0.6) 100%);
+    background: radial-gradient(ellipse 90% 70% at 50% 30%, transparent 0%, rgba(1, 5, 6, 0.6) 100%);
   }
 
   main {
@@ -155,12 +206,17 @@
     justify-content: center;
     position: relative;
     box-shadow:
-      0 14px 34px rgba(34, 197, 94, 0.4),
       0 2px 6px rgba(0, 0, 0, 0.3),
       inset 0 1px 1px rgba(255, 255, 255, 0.55),
       inset 0 -10px 18px rgba(0, 0, 0, 0.18);
     margin-bottom: 22px;
     overflow: hidden;
+    animation: avatarGlow 5s ease-in-out infinite;
+  }
+
+  @keyframes avatarGlow {
+    0%, 100% { box-shadow: 0 14px 34px rgba(77, 243, 255, 0.35), 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.55), inset 0 -10px 18px rgba(0, 0, 0, 0.18); }
+    50% { box-shadow: 0 14px 44px rgba(77, 243, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.55), inset 0 -10px 18px rgba(0, 0, 0, 0.18); }
   }
 
   .avatar img {
@@ -224,7 +280,7 @@
     backdrop-filter: blur(24px) saturate(200%);
     -webkit-backdrop-filter: blur(24px) saturate(200%);
     box-shadow:
-      0 8px 22px rgba(3, 6, 4, 0.5),
+      0 8px 22px rgba(1, 5, 6, 0.5),
       inset 0 1px 0 rgba(255, 255, 255, 0.18),
       inset 0 -1px 0 rgba(0, 0, 0, 0.15);
     color: var(--text-primary);
@@ -260,7 +316,7 @@
       radial-gradient(60px circle at var(--x) var(--y), rgba(255, 255, 255, 0.26), transparent 65%),
       var(--glass-fill-hover);
     box-shadow:
-      0 12px 28px rgba(34, 197, 94, 0.3),
+      0 12px 28px rgba(77, 243, 255, 0.32),
       inset 0 1px 0 rgba(255, 255, 255, 0.26),
       inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   }
@@ -271,7 +327,7 @@
   }
 
   .social-icon:focus-visible {
-    outline: 2px solid var(--orb-emerald);
+    outline: 2px solid var(--glow-cyan);
     outline-offset: 3px;
   }
 
@@ -332,7 +388,7 @@
     backdrop-filter: blur(32px) saturate(220%);
     -webkit-backdrop-filter: blur(32px) saturate(220%);
     box-shadow:
-      0 10px 30px rgba(3, 6, 20, 0.4),
+      0 10px 30px rgba(1, 5, 6, 0.45),
       inset 0 1px 0 rgba(255, 255, 255, 0.16),
       inset 0 -1px 0 rgba(255, 255, 255, 0.03);
     text-decoration: none;
@@ -377,7 +433,7 @@
       radial-gradient(180px circle at var(--x) var(--y), rgba(255, 255, 255, 0.22), transparent 60%),
       var(--glass-fill-hover);
     box-shadow:
-      0 16px 40px rgba(34, 197, 94, 0.22),
+      0 16px 40px rgba(77, 243, 255, 0.24),
       inset 0 1px 0 rgba(255, 255, 255, 0.24),
       inset 0 -1px 0 rgba(255, 255, 255, 0.05);
   }
@@ -388,7 +444,7 @@
   }
 
   .glass-card:focus-visible {
-    outline: 2px solid var(--orb-emerald);
+    outline: 2px solid var(--glow-cyan);
     outline-offset: 3px;
   }
 
@@ -488,7 +544,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .orb, header, .section-label, .glass-card {
+    .orb, .jelly, .jelly .tentacles, header, .avatar, .section-label, .glass-card {
       animation: none !important;
       opacity: 1 !important;
       transform: none !important;
@@ -503,6 +559,66 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
+
+    <svg class="jelly jelly-a" viewBox="0 0 120 190" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bellA" cx="50%" cy="25%" r="75%">
+          <stop offset="0%" stop-color="#d9fbff" stop-opacity="0.75"/>
+          <stop offset="55%" stop-color="#4df3ff" stop-opacity="0.32"/>
+          <stop offset="100%" stop-color="#4df3ff" stop-opacity="0.05"/>
+        </radialGradient>
+      </defs>
+      <path d="M10 58 C10 18, 110 18, 110 58 Q108 78 100 86 Q95 90 85 89 Q80 90 72 88 Q66 92 60 91 Q54 92 48 88 Q40 90 35 89 Q25 90 20 86 Q12 78 10 58 Z" fill="url(#bellA)"/>
+      <path d="M22 50 Q60 22 98 50" stroke="#d9fbff" stroke-width="1" fill="none" opacity="0.3"/>
+      <path d="M16 62 Q60 40 104 62" stroke="#d9fbff" stroke-width="1" fill="none" opacity="0.22"/>
+      <g class="tentacles" stroke="#4df3ff" stroke-linecap="round" fill="none">
+        <path d="M20 86 C16 106, 26 118, 18 144 C12 158, 22 170, 16 184" stroke-width="1.1" opacity="0.4"/>
+        <path d="M35 89 C33 109, 43 121, 36 147 C32 162, 40 173, 35 187" stroke-width="1" opacity="0.32"/>
+        <path d="M48 88 C47 111, 55 123, 49 151" stroke-width="1" opacity="0.36"/>
+        <path d="M60 91 C60 116, 60 130, 60 158" stroke-width="1.2" opacity="0.42"/>
+        <path d="M72 88 C73 111, 65 123, 71 151" stroke-width="1" opacity="0.36"/>
+        <path d="M85 89 C87 109, 77 121, 84 147 C88 162, 80 173, 85 187" stroke-width="1" opacity="0.32"/>
+        <path d="M100 86 C104 106, 94 118, 102 144 C108 158, 98 170, 104 184" stroke-width="1.1" opacity="0.4"/>
+      </g>
+    </svg>
+
+    <svg class="jelly jelly-b" viewBox="0 0 120 190" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bellB" cx="50%" cy="25%" r="75%">
+          <stop offset="0%" stop-color="#ffe4f6" stop-opacity="0.7"/>
+          <stop offset="55%" stop-color="#ff5ec4" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#ff5ec4" stop-opacity="0.05"/>
+        </radialGradient>
+      </defs>
+      <path d="M10 58 C10 18, 110 18, 110 58 Q104 80 96 87 Q88 90 80 89 Q70 92 60 91 Q50 92 40 89 Q32 90 24 87 Q14 78 10 58 Z" fill="url(#bellB)"/>
+      <path d="M22 50 Q60 22 98 50" stroke="#ffe4f6" stroke-width="1" fill="none" opacity="0.28"/>
+      <g class="tentacles" stroke="#ff5ec4" stroke-linecap="round" fill="none">
+        <path d="M24 87 C20 104, 28 116, 22 140 C18 152, 25 162, 20 174" stroke-width="1" opacity="0.36"/>
+        <path d="M40 89 C39 109, 46 119, 41 143" stroke-width="1" opacity="0.3"/>
+        <path d="M60 91 C60 112, 60 124, 60 150" stroke-width="1.1" opacity="0.38"/>
+        <path d="M80 89 C81 109, 74 119, 79 143" stroke-width="1" opacity="0.3"/>
+        <path d="M96 87 C100 104, 92 116, 98 140 C102 152, 95 162, 100 174" stroke-width="1" opacity="0.36"/>
+      </g>
+    </svg>
+
+    <svg class="jelly jelly-c" viewBox="0 0 120 190" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bellC" cx="50%" cy="25%" r="75%">
+          <stop offset="0%" stop-color="#ede4ff" stop-opacity="0.65"/>
+          <stop offset="55%" stop-color="#8b5cf6" stop-opacity="0.26"/>
+          <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.05"/>
+        </radialGradient>
+      </defs>
+      <path d="M10 58 C10 18, 110 18, 110 58 Q102 80 94 88 Q86 90 75 89 Q68 92 60 91 Q52 92 45 89 Q34 90 26 88 Q14 78 10 58 Z" fill="url(#bellC)"/>
+      <g class="tentacles" stroke="#8b5cf6" stroke-linecap="round" fill="none">
+        <path d="M26 88 C22 103, 30 113, 24 133" stroke-width="1" opacity="0.32"/>
+        <path d="M45 89 C44 106, 50 114, 46 134" stroke-width="1" opacity="0.28"/>
+        <path d="M60 91 C60 108, 60 118, 60 140" stroke-width="1.1" opacity="0.34"/>
+        <path d="M75 89 C76 106, 70 114, 74 134" stroke-width="1" opacity="0.28"/>
+        <path d="M94 88 C98 103, 90 113, 96 133" stroke-width="1" opacity="0.32"/>
+      </g>
+    </svg>
+
   </div>
   <div class="grain"></div>
   <div class="vignette"></div>
@@ -540,7 +656,7 @@
     <p class="section-label" data-stagger>Find me</p>
     <div class="link-list">
 
-      <a class="glass-card" href="https://scotch.quest" data-stagger data-tilt>
+      <a class="glass-card" href="https://pimby.fyi/" data-stagger data-tilt>
         <span class="card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="9"></circle>
@@ -549,7 +665,7 @@
           </svg>
         </span>
         <span class="card-text">
-          <span class="card-label">scotch.quest</span>
+          <span class="card-label">pimby.fyi</span>
           <span class="card-sub">The main site</span>
         </span>
         <span class="card-arrow">
@@ -667,6 +783,88 @@
         </span>
       </a>
 
+      <a class="glass-card" href="https://wishyy.scotch.quest" data-stagger data-tilt>
+        <span class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="4" rx="1"></rect>
+            <rect x="5" y="12" width="14" height="9" rx="1"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M12 8c-1.5-4-6-4-6-1c0 1.5 2 1 6 1z"></path>
+            <path d="M12 8c1.5-4 6-4 6-1c0 1.5-2 1-6 1z"></path>
+          </svg>
+        </span>
+        <span class="card-text">
+          <span class="card-label">wishyy</span>
+          <span class="card-sub">A multi family gift list, so nobody doubles up</span>
+        </span>
+        <span class="card-arrow">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M13 6l6 6-6 6"></path>
+          </svg>
+        </span>
+      </a>
+
+      <a class="glass-card" href="https://glep.club" data-stagger data-tilt>
+        <span class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M8 14s1.5 2 4 2s4-2 4-2"></path>
+            <path d="M9 9h.01"></path>
+            <path d="M15 9h.01"></path>
+          </svg>
+        </span>
+        <span class="card-text">
+          <span class="card-label">glep.club</span>
+          <span class="card-sub">A Smiling Friends fan site, blog, and gallery</span>
+        </span>
+        <span class="card-arrow">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M13 6l6 6-6 6"></path>
+          </svg>
+        </span>
+      </a>
+
+      <a class="glass-card" href="https://slimetutorials.com" data-stagger data-tilt>
+        <span class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2c4 5 7 8.5 7 12a7 7 0 0 1-14 0c0-3.5 3-7 7-12z"></path>
+          </svg>
+        </span>
+        <span class="card-text">
+          <span class="card-label">slimetutorials.com</span>
+          <span class="card-sub">Slime tutorials</span>
+        </span>
+        <span class="card-arrow">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M13 6l6 6-6 6"></path>
+          </svg>
+        </span>
+      </a>
+
+      <a class="glass-card" href="https://streamschedule.org" data-stagger data-tilt>
+        <span class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+            <path d="M3 10h18"></path>
+            <path d="M8 3v4"></path>
+            <path d="M16 3v4"></path>
+          </svg>
+        </span>
+        <span class="card-text">
+          <span class="card-label">streamschedule.org</span>
+          <span class="card-sub">Build and publish a fully customizable streaming schedule</span>
+        </span>
+        <span class="card-arrow">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M13 6l6 6-6 6"></path>
+          </svg>
+        </span>
+      </a>
+
     </div>
 
     <footer data-stagger>
@@ -685,7 +883,7 @@
     staggerItems.forEach(function (item, index) {
       setTimeout(function () {
         item.classList.add('in');
-      }, 500 + index * 110);
+      }, 500 + index * 90);
     });
 
     var tiltItems = document.querySelectorAll('[data-tilt]');
