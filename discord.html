@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クラゲ / james</title>
+<meta name="description" content="no thoughts, no worries, just blub blub. links, socials and stuff for james (pimby).">
+<meta name="theme-color" content="#1b1440">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-top: #1d1748;
+    --bg-bottom: #2a1d55;
+    --card: rgba(255, 255, 255, 0.07);
+    --card-hover: rgba(255, 255, 255, 0.12);
+    --rim: rgba(255, 255, 255, 0.10);
+    --text: #f2f0ff;
+    --muted: #b7b0d8;
+    --accent: #5a3bc4;
+    --accent-hi: #6c4ae0;
+    --teal: #6ee7e0;
+    --sky: #6aa8ff;
+    --duck: #fdf4dc;
+    --duck-shade: #ecdcb4;
+    --orange: #f7a53a;
+    --font: 'Nunito', system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { background: var(--bg-bottom); }
+  body {
+    font-family: var(--font);
+    color: var(--text);
+    background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%) fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- drifting background jellies + bubbles ---------- */
+  .sea { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .sea .jelly {
+    position: absolute; width: 70px; opacity: .22;
+    animation: drift linear infinite, pulse 3.2s ease-in-out infinite;
+  }
+  .sea .jelly:nth-child(1) { left: 6%;  animation-duration: 38s, 3.4s; animation-delay: -4s, 0s; width: 80px; }
+  .sea .jelly:nth-child(2) { left: 82%; animation-duration: 46s, 2.9s; animation-delay: -22s, -1s; width: 54px; }
+  .sea .jelly:nth-child(3) { left: 50%; animation-duration: 54s, 3.8s; animation-delay: -36s, -2s; width: 40px; opacity: .15; }
+  .sea .jelly:nth-child(4) { left: 28%; animation-duration: 60s, 3.1s; animation-delay: -12s, -.5s; width: 46px; opacity: .14; }
+  @keyframes drift {
+    from { transform: translate(0, 110vh) rotate(-4deg); }
+    50%  { transform: translate(30px, 45vh) rotate(5deg); }
+    to   { transform: translate(-10px, -30vh) rotate(-4deg); }
+  }
+  @keyframes pulse {
+    0%, 100% { scale: 1 1; }
+    45% { scale: 1.06 .9; }
+  }
+
+  .bubble {
+    position: absolute; bottom: -20px; border-radius: 50%;
+    border: 1px solid rgba(200, 230, 255, .45);
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%);
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    from { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: .8; }
+    to { transform: translate(var(--sway, 20px), -110vh); opacity: 0; }
+  }
+
+  /* ---------- card ---------- */
+  .profile {
+    position: relative; z-index: 1;
+    width: min(560px, 100%);
+    margin: 0 auto;
+    padding-bottom: 48px;
+  }
+  @media (min-width: 600px) {
+    .profile { margin: 32px auto; border-radius: 28px; overflow: hidden;
+      background: linear-gradient(180deg, #221a52, #2b1e58);
+      box-shadow: 0 30px 80px rgba(5, 2, 25, .6), 0 0 0 1px var(--rim); }
+  }
+
+  /* ---------- banner ---------- */
+  .banner {
+    position: relative; height: 260px; overflow: hidden;
+    background: #0b1d5c;
+  }
+  .banner video, .banner .poster {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+  .banner .deep {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(40,110,230,.15) 30%, rgba(29,23,72,.0) 60%, var(--bg-top) 100%);
+    mix-blend-mode: normal; z-index: 3;
+  }
+  @media (min-width: 600px) { .banner .deep { background: linear-gradient(180deg, rgba(40,110,230,.15) 30%, rgba(34,26,82,0) 60%, #221a52 100%); } }
+
+  /* surface band: water seen from just below, with light + lily pads */
+  .surface {
+    position: absolute; left: 0; right: 0; top: 0; height: 92px; z-index: 2;
+    background:
+      radial-gradient(ellipse 60% 70% at 30% 0%, rgba(255,255,255,.95), transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 10%, rgba(220,250,255,.9), transparent 70%),
+      linear-gradient(180deg, #bff4ff 0%, #6fd3f2 55%, rgba(60,150,230,.0) 100%);
+    overflow: hidden;
+  }
+  .caustics {
+    position: absolute; inset: -40px; opacity: .55;
+    background-image:
+      radial-gradient(ellipse 18px 8px at 20% 30%, #fff 40%, transparent 60%),
+      radial-gradient(ellipse 26px 9px at 60% 55%, #fff 40%, transparent 60%),
+      radial-gradient(ellipse 14px 6px at 85% 25%, #fff 40%, transparent 60%),
+      radial-gradient(ellipse 22px 7px at 40% 75%, #fff 40%, transparent 60%);
+    background-size: 160px 70px;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 160px 35px; } }
+  .waterline { position: absolute; left: 0; bottom: 0; width: 200%; height: 26px; animation: wave 7s linear infinite; }
+  @keyframes wave { to { transform: translateX(-50%); } }
+
+  .pad { position: absolute; z-index: 4; animation: padbob 6s ease-in-out infinite; }
+  .pad.p1 { top: 14px; left: -24px; width: 150px; }
+  .pad.p2 { top: 44px; left: 120px; width: 110px; animation-delay: -2s; }
+  .pad.p3 { top: -10px; right: 70px; width: 130px; animation-delay: -4s; }
+  @keyframes padbob { 50% { transform: translateY(3px) rotate(2deg); } }
+
+  /* ---------- the duck ---------- */
+  .duck-wrap {
+    position: absolute; z-index: 5; top: 24px; left: 52%;
+    width: 210px; height: 210px;
+    animation: paddle-across 26s ease-in-out infinite;
+  }
+  @keyframes paddle-across {
+    0%, 100% { transform: translateX(-60px); }
+    50% { transform: translateX(40px); }
+  }
+  .duck { width: 100%; height: 100%; overflow: visible; }
+  .duck .body {
+    transform-origin: 100px 62px;
+    animation: dabble 9s ease-in-out infinite;
+  }
+  @keyframes dabble {
+    0%, 8%   { transform: rotate(0deg) translateY(0); }
+    4%       { transform: rotate(-3deg) translateY(2px); }
+    16%      { transform: rotate(-4deg) translateY(1px); }
+    26%, 52% { transform: rotate(-62deg) translateY(10px); }   /* head under, tail up */
+    34%      { transform: rotate(-58deg) translateY(12px); }
+    44%      { transform: rotate(-66deg) translateY(9px); }
+    62%      { transform: rotate(4deg) translateY(-2px); }       /* pops back up */
+    70%, 100%{ transform: rotate(0deg) translateY(0); }
+  }
+  .duck .foot { transform-box: fill-box; transform-origin: top center; animation: kick .7s ease-in-out infinite alternate; }
+  .duck .foot.f2 { animation-delay: -.35s; }
+  @keyframes kick { from { transform: rotate(-28deg); } to { transform: rotate(22deg); } }
+  .duck .tail { transform-box: fill-box; transform-origin: left center; animation: wiggle 9s ease-in-out infinite; }
+  @keyframes wiggle {
+    26%, 50% { transform: rotate(0); }
+    28%, 32%, 36%, 40%, 44% { transform: rotate(-14deg); }
+    30%, 34%, 38%, 42%, 46% { transform: rotate(10deg); }
+  }
+  .duck .blink { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+  @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+  .duck-bubbles circle { opacity: 0; animation: duckbub 9s ease-out infinite; }
+  .duck-bubbles circle:nth-child(2) { animation-delay: .4s; }
+  .duck-bubbles circle:nth-child(3) { animation-delay: .9s; }
+  .duck-bubbles circle:nth-child(4) { animation-delay: 1.5s; }
+  @keyframes duckbub {
+    0%, 28% { opacity: 0; transform: translate(0, 0); }
+    32% { opacity: .9; }
+    48% { opacity: 0; transform: translate(6px, -70px); }
+    100% { opacity: 0; }
+  }
+  .duck-wrap:hover .body, .duck-wrap.quack .body { animation-duration: 2.2s; }
+  .quack-txt {
+    position: absolute; top: -4px; left: 6px; font-weight: 800; font-size: 15px;
+    color: #fff; text-shadow: 0 2px 6px rgba(0,0,40,.6);
+    opacity: 0; transform: translateY(6px) rotate(-8deg); transition: .25s; pointer-events: none;
+  }
+  .duck-wrap.quack .quack-txt { opacity: 1; transform: translateY(-6px) rotate(-8deg); }
+
+  /* ---------- header row: avatar + status ---------- */
+  .head { position: relative; z-index: 6; margin-top: -86px; padding: 0 20px; display: flex; align-items: flex-end; gap: 14px; }
+  .avatar { position: relative; width: 120px; height: 120px; flex: none; }
+  .avatar .ring {
+    position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
+    border: 6px solid #241b55; background: #120c2c;
+    box-shadow: 0 0 0 2px rgba(120,160,255,.35), 0 0 30px rgba(170,130,255,.35);
+  }
+  .avatar video, .avatar img.poster { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar .deco { position: absolute; inset: -22px; width: calc(100% + 44px); height: calc(100% + 44px); pointer-events: none; overflow: visible; }
+  .deco .reed { transform-box: fill-box; transform-origin: bottom center; animation: sway 4s ease-in-out infinite; }
+  .deco .reed.r2 { animation-delay: -1.3s; }
+  .deco .reed.r3 { animation-delay: -2.1s; }
+  @keyframes sway { 50% { transform: rotate(6deg); } }
+  .deco .mini-duck { animation: bob 2.6s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-2.5px) rotate(-3deg); } }
+  .deco .ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.6s ease-out infinite; }
+  @keyframes ripple { from { transform: scale(.6); opacity: .8; } to { transform: scale(1.4); opacity: 0; } }
+  .status-dot {
+    position: absolute; right: 2px; bottom: 6px; width: 30px; height: 30px; border-radius: 50%;
+    background: #241b55; display: grid; place-items: center; z-index: 2;
+  }
+  .status-dot span { width: 20px; height: 20px; border-radius: 50%; background: #f0b232;
+    -webkit-mask: radial-gradient(circle at 30% 30%, transparent 6px, #000 6.5px);
+            mask: radial-gradient(circle at 30% 30%, transparent 6px, #000 6.5px); }
+
+  .status {
+    position: relative; flex: 1; margin-bottom: 30px; padding: 12px 16px;
+    border-radius: 20px; background: rgba(60, 80, 160, .55);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.12);
+    font-size: 16px; line-height: 1.35; color: #e6ecff;
+  }
+  .status::before, .status::after { content: ''; position: absolute; border-radius: 50%; background: rgba(60, 80, 160, .55); }
+  .status::before { width: 14px; height: 14px; left: -6px; top: -10px; }
+  .status::after  { width: 8px; height: 8px; left: -16px; top: -20px; }
+  .status .emoji { display: inline-block; margin-right: 6px; animation: pulse 2.4s ease-in-out infinite; }
+
+  /* ---------- identity ---------- */
+  .info { position: relative; z-index: 2; padding: 14px 20px 0; }
+  .name {
+    font-size: 34px; line-height: 1.1; font-weight: 800; letter-spacing: .02em;
+    background: linear-gradient(90deg, var(--teal), var(--sky) 55%, #a6c8ff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% 100%; animation: sheen 6s ease-in-out infinite;
+  }
+  .name .jp { font-family: 'M PLUS Rounded 1c', var(--font); }
+  .name .slash { opacity: .7; margin: 0 .25em; font-weight: 500; }
+  .name .en { font-family: 'Space Mono', monospace; }
+  @keyframes sheen { 50% { background-position: 100% 0; } }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 8px; font-size: 17px; color: #e8e6f8; }
+  .meta .dot { opacity: .6; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 10px; background: rgba(255,255,255,.09); font-weight: 800; font-size: 15px; }
+  .badges { display: inline-flex; gap: 4px; margin-top: 12px; padding: 5px 8px; border-radius: 10px; background: rgba(255,255,255,.08); }
+  .badge { position: relative; width: 28px; height: 28px; display: grid; place-items: center; font-size: 18px; cursor: default; border-radius: 8px; transition: transform .15s; }
+  .badge:hover { transform: translateY(-2px) scale(1.12); }
+  .badge::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%) translateY(4px); white-space: nowrap;
+    padding: 6px 10px; border-radius: 8px; background: #0f0a26; color: #fff; font-size: 13px; font-weight: 700;
+    opacity: 0; pointer-events: none; transition: .15s;
+  }
+  .badge:hover::after, .badge:focus::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 16px; border-radius: 14px; border: 0; cursor: pointer;
+    font: 800 17px var(--font); color: #fff; background: var(--accent);
+    transition: background .15s, transform .1s;
+  }
+  .btn:hover { background: var(--accent-hi); }
+  .btn:active { transform: scale(.98); }
+  .btn.ghost { flex: 0 0 auto; background: rgba(255,255,255,.1); }
+  .btn.ghost:hover { background: rgba(255,255,255,.16); }
+  .btn svg { width: 20px; height: 20px; }
+
+  /* ---------- tabs ---------- */
+  .tabs { display: flex; margin: 24px 20px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .tab {
+    flex: 1; background: none; border: 0; cursor: pointer; padding: 12px 0 14px; position: relative;
+    font: 800 17px var(--font); color: var(--muted); transition: color .15s;
+  }
+  .tab[aria-selected="true"] { color: #fff; }
+  .tab[aria-selected="true"]::after { content: ''; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 3px; border-radius: 3px; background: #fff; }
+  .panel { padding: 22px 20px 0; animation: fadein .3s ease; }
+  .panel[hidden] { display: none; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } }
+
+  h2 { font-size: 16px; font-weight: 700; color: #fff; margin: 0 0 10px; }
+  .section + .section { margin-top: 26px; }
+  .bio { font-size: 18px; line-height: 1.6; color: #ece9fb; }
+  .tz { margin-top: 18px; font-size: 18px; line-height: 1.6; }
+  .tz mark { background: rgba(255,255,255,.12); color: #fff; padding: 1px 4px; border-radius: 4px; font-weight: 700; }
+  .since { display: flex; align-items: center; gap: 10px; font-size: 18px; }
+  .since svg { width: 22px; height: 22px; color: var(--muted); }
+
+  /* list cards (connections + links) */
+  .list { border-radius: 18px; background: var(--card); overflow: hidden; border: 1px solid rgba(255,255,255,.05); }
+  .row {
+    display: flex; align-items: center; gap: 16px; padding: 16px 18px; position: relative;
+    transition: background .15s;
+  }
+  .row:hover { background: rgba(255,255,255,.05); }
+  .row + .row::before { content: ''; position: absolute; top: 0; left: 64px; right: 0; height: 1px; background: rgba(255,255,255,.08); }
+  .row .ico { width: 30px; height: 30px; flex: none; display: grid; place-items: center; }
+  .row .ico svg { width: 30px; height: 30px; }
+  .row .txt { flex: 1; min-width: 0; }
+  .row .label { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+  .row .sub { font-size: 14px; color: var(--muted); margin-top: 1px; }
+  .row .check { width: 19px; height: 19px; flex: none; }
+  .row .arrow { width: 20px; height: 20px; color: var(--muted); flex: none; transition: transform .2s, color .2s; }
+  .row:hover .arrow { transform: translate(2px, -2px); color: #fff; }
+
+  /* link tree buttons */
+  .tree { display: grid; gap: 10px; }
+  .tree a {
+    display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px;
+    background: var(--card); border: 1px solid rgba(255,255,255,.06);
+    transition: transform .18s, background .18s, border-color .18s;
+    opacity: 0; transform: translateY(10px); animation: pop .45s ease forwards;
+  }
+  .tree a:hover { background: var(--card-hover); border-color: rgba(140,180,255,.35); transform: translateY(-2px); }
+  @keyframes pop { to { opacity: 1; transform: none; } }
+  .tree .emo { width: 40px; height: 40px; flex: none; border-radius: 12px; display: grid; place-items: center; font-size: 21px; background: rgba(255,255,255,.08); }
+  .tree .emo svg { width: 22px; height: 22px; }
+  .tree .label { font-weight: 800; font-size: 17px; }
+  .tree .sub { font-size: 14px; color: var(--muted); }
+  .tree .txt { flex: 1; min-width: 0; }
+
+  .note { margin-top: 26px; padding: 16px 18px; border-radius: 18px; background: var(--card); font-size: 15px; color: var(--muted); }
+  .note b { color: #fff; display: block; font-size: 16px; margin-bottom: 2px; }
+
+  footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 36px; position: relative; z-index: 1; }
+  footer a { text-decoration: underline; text-underline-offset: 2px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 20;
+    padding: 10px 18px; border-radius: 12px; background: #0f0a26; color: #fff; font-weight: 700;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4); opacity: 0; transition: .25s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 420px) {
+    .banner { height: 230px; }
+    .duck-wrap { width: 180px; height: 180px; left: 46%; }
+    .avatar { width: 104px; height: 104px; }
+    .head { margin-top: -74px; padding: 0 16px; }
+    .info, .panel { padding-left: 16px; padding-right: 16px; }
+    .tabs { margin-left: 16px; margin-right: 16px; }
+    .status { font-size: 15px; margin-bottom: 22px; }
+    .name { font-size: 29px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .tree a { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- background: drifting jellies + bubbles -->
+<div class="sea" aria-hidden="true">
+  <svg class="jelly" viewBox="0 0 60 100"><use href="#jelly-shape"/></svg>
+  <svg class="jelly" viewBox="0 0 60 100"><use href="#jelly-shape"/></svg>
+  <svg class="jelly" viewBox="0 0 60 100"><use href="#jelly-shape"/></svg>
+  <svg class="jelly" viewBox="0 0 60 100"><use href="#jelly-shape"/></svg>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="jg" cx="50%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#e9e4ff"/><stop offset=".6" stop-color="#9db8ff" stop-opacity=".6"/><stop offset="1" stop-color="#7a8cff" stop-opacity=".1"/>
+    </radialGradient>
+    <symbol id="jelly-shape" viewBox="0 0 60 100">
+      <path d="M4 30 C4 6 56 6 56 30 Q52 38 46 36 Q40 40 30 38 Q20 40 14 36 Q8 38 4 30Z" fill="url(#jg)"/>
+      <g stroke="#b8c8ff" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".8">
+        <path d="M14 37 C10 52 18 62 12 80"/><path d="M24 39 C22 58 28 70 24 92"/>
+        <path d="M36 39 C38 58 32 70 36 92"/><path d="M46 37 C50 52 42 62 48 80"/>
+      </g>
+    </symbol>
+    <symbol id="check" viewBox="0 0 24 24">
+      <path fill="#fff" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.7 1.8-1 3.1 1 3.1-2.7 1.8-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1L2.5 15.9l1-3.1-1-3.1 2.7-1.8 1-3.1 3.2.2z"/>
+      <path d="M7.5 12.2l3 3 6-6.2" stroke="#1d1748" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<main class="profile">
+
+  <!-- ===== banner: pond surface, duck, jellies ===== -->
+  <div class="banner">
+    <video autoplay muted loop playsinline preload="auto" poster="/images/profile/jellies-blue.jpg" aria-hidden="true">
+      <source src="/images/profile/jellies-blue.mp4" type="video/mp4">
+    </video>
+
+    <div class="surface" aria-hidden="true">
+      <div class="caustics"></div>
+      <svg class="waterline" viewBox="0 0 800 26" preserveAspectRatio="none">
+        <path d="M0 10 Q50 0 100 10 T200 10 T300 10 T400 10 T500 10 T600 10 T700 10 T800 10 V26 H0Z" fill="rgba(70,150,235,.55)"/>
+        <path d="M0 14 Q50 6 100 14 T200 14 T300 14 T400 14 T500 14 T600 14 T700 14 T800 14" stroke="#fff" stroke-opacity=".7" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+
+    <!-- lily pads (seen from below) -->
+    <svg class="pad p1" viewBox="0 0 150 50" aria-hidden="true"><path d="M75 6 C130 6 148 22 140 34 C128 46 22 48 10 34 C2 24 20 6 70 6 L80 25 Z" fill="#3e8a3a"/><path d="M75 6 C130 6 148 22 140 34" stroke="#6bbf55" stroke-width="3" fill="none"/></svg>
+    <svg class="pad p2" viewBox="0 0 150 50" aria-hidden="true"><path d="M75 8 C126 8 146 22 138 33 C126 44 24 46 12 33 C4 24 24 8 66 8 L76 26 Z" fill="#2f7a35"/><path d="M12 33 C24 46 126 44 138 33" stroke="#76c95a" stroke-width="3" fill="none"/></svg>
+    <svg class="pad p3" viewBox="0 0 150 50" aria-hidden="true"><path d="M75 6 C130 6 148 22 140 34 C128 46 22 48 10 34 C2 24 20 6 72 6 L84 24 Z" fill="#479b3f"/></svg>
+
+    <!-- the duck: an original hand-drawn svg, dabbles head-first into the jellies -->
+    <div class="duck-wrap" id="duck" role="img" aria-label="a duck dipping its head under the water">
+      <span class="quack-txt">quack!</span>
+      <svg class="duck" viewBox="0 0 200 200">
+        <g class="duck-bubbles" fill="none" stroke="#e6f6ff" stroke-width="1.5">
+          <circle cx="38" cy="120" r="4"/><circle cx="46" cy="132" r="3"/><circle cx="30" cy="140" r="5"/><circle cx="42" cy="150" r="2.5"/>
+        </g>
+        <g class="body">
+          <!-- feet (under the water, paddling) -->
+          <g class="foot f1"><path d="M94 82 L92 108" stroke="#f08f2a" stroke-width="5" stroke-linecap="round"/><path d="M92 106 L76 122 L88 118 L94 126 L98 116 L108 118 Z" fill="var(--orange)" stroke="#e88722" stroke-width="2" stroke-linejoin="round"/></g>
+          <g class="foot f2"><path d="M116 82 L118 106" stroke="#f08f2a" stroke-width="5" stroke-linecap="round"/><path d="M118 104 L104 120 L114 117 L120 124 L124 114 L134 116 Z" fill="var(--orange)" stroke="#e88722" stroke-width="2" stroke-linejoin="round"/></g>
+          <!-- tail -->
+          <path class="tail" d="M152 54 Q176 38 182 40 Q176 52 172 60 Q162 66 150 66 Z" fill="var(--duck)"/>
+          <!-- body -->
+          <ellipse cx="104" cy="62" rx="56" ry="28" fill="var(--duck)"/>
+          <path d="M60 72 Q104 98 156 70 Q150 86 104 90 Q70 90 60 72Z" fill="var(--duck-shade)"/>
+          <!-- wing -->
+          <path d="M92 50 Q126 38 150 56 Q132 72 100 66 Q86 62 92 50Z" fill="#f4e8c6"/>
+          <path d="M108 60 Q126 62 140 58" stroke="#e2cf9f" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- neck + head -->
+          <path d="M58 58 Q50 30 58 18 L80 22 Q74 40 84 56 Z" fill="var(--duck)"/>
+          <circle cx="66" cy="22" r="20" fill="var(--duck)"/>
+          <!-- bill -->
+          <path d="M48 20 Q30 18 22 26 Q30 34 50 32 Z" fill="var(--orange)"/>
+          <path d="M24 27 Q34 29 48 27" stroke="#d97a1e" stroke-width="1.6" fill="none"/>
+          <!-- eye -->
+          <ellipse class="blink" cx="62" cy="16" rx="3" ry="3.6" fill="#2b1c14"/>
+          <circle cx="63" cy="15" r=".9" fill="#fff"/>
+          <!-- cheek -->
+          <ellipse cx="72" cy="28" rx="5" ry="3" fill="#ffb7a8" opacity=".45"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="deep"></div>
+  </div>
+
+  <!-- ===== avatar + status ===== -->
+  <div class="head">
+    <div class="avatar">
+      <div class="ring">
+        <video autoplay muted loop playsinline preload="auto" poster="/images/profile/jelly-purple.jpg" aria-label="purple jellyfish avatar">
+          <source src="/images/profile/jelly-purple.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- avatar decoration: cattails + a little floating duck -->
+      <svg class="deco" viewBox="0 0 164 164" aria-hidden="true">
+        <g class="reed r1"><path d="M22 70 Q20 40 26 14" stroke="#c9a54e" stroke-width="2.4" fill="none"/><rect x="21" y="10" width="7" height="18" rx="3.5" fill="#9b6b2e" transform="rotate(8 24 19)"/></g>
+        <g class="reed r2"><path d="M30 66 Q34 44 40 30" stroke="#c9a54e" stroke-width="2" fill="none"/><path d="M40 30 Q46 18 50 14" stroke="#c9a54e" stroke-width="1.6" fill="none"/></g>
+        <g class="reed r3"><path d="M140 66 Q144 40 138 16" stroke="#c9a54e" stroke-width="2.4" fill="none"/><rect x="134" y="12" width="7" height="18" rx="3.5" fill="#9b6b2e" transform="rotate(-8 137 21)"/></g>
+        <g class="reed r1"><path d="M132 62 Q130 44 124 32" stroke="#c9a54e" stroke-width="1.8" fill="none"/></g>
+        <!-- water arc at bottom -->
+        <path d="M14 112 Q82 176 150 112 Q144 150 82 158 Q20 150 14 112Z" fill="#3d7fd6" opacity=".9"/>
+        <path d="M22 120 Q82 168 142 120" stroke="#a9dcff" stroke-width="2" fill="none" stroke-dasharray="4 7" opacity=".9"/>
+        <ellipse class="ripple" cx="44" cy="140" rx="20" ry="4" fill="none" stroke="#d6f1ff" stroke-width="1.5"/>
+        <!-- mini duck -->
+        <g class="mini-duck">
+          <ellipse cx="46" cy="132" rx="20" ry="11" fill="var(--duck)"/>
+          <path d="M60 128 Q70 120 72 122 Q70 130 64 134Z" fill="var(--duck)"/>
+          <circle cx="32" cy="116" r="9" fill="var(--duck)"/>
+          <path d="M28 124 Q30 128 36 128 L36 118Z" fill="var(--duck)"/>
+          <path d="M24 116 Q16 116 14 120 Q20 122 25 120Z" fill="var(--orange)"/>
+          <circle cx="30" cy="114" r="1.5" fill="#2b1c14"/>
+          <path d="M42 128 Q52 124 60 130" stroke="#e8d8ad" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <div class="status-dot" title="idle"><span></span></div>
+    </div>
+    <div class="status"><span class="emoji">🪼</span>no thoughts, no worries, just blub blub.</div>
+  </div>
+
+  <!-- ===== name + tags ===== -->
+  <section class="info">
+    <h1 class="name"><span class="jp">クラゲ</span><span class="slash">/</span><span class="en">james</span></h1>
+    <div class="meta">
+      <span>pimbypickle</span><span class="dot">•</span><span>he/him | they/them</span>
+      <span class="chip">💙 FISH</span>
+    </div>
+    <div class="badges">
+      <span class="badge" tabindex="0" data-tip="certified blub-er">🫧</span>
+      <span class="badge" tabindex="0" data-tip="jellyfish enjoyer">🪼</span>
+      <span class="badge" tabindex="0" data-tip="duck appreciator">🦆</span>
+      <span class="badge" tabindex="0" data-tip="zelda is pretty dope">🗡️</span>
+      <span class="badge" tabindex="0" data-tip="makes videos">🎬</span>
+      <span class="badge" tabindex="0" data-tip="writes (bad) code">💻</span>
+      <span class="badge" tabindex="0" data-tip="here since 2021">🌙</span>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="https://discord.gg/A9hZaJjKem" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        Join my Discord
+      </a>
+      <button class="btn ghost" id="copy" type="button" aria-label="copy username">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+        @
+      </button>
+    </div>
+  </section>
+
+  <!-- ===== tabs ===== -->
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="p-main" id="t-main">Main</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="p-links" id="t-links">Links</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="p-projects" id="t-projects">Projects</button>
+  </div>
+
+  <!-- MAIN -->
+  <section class="panel" id="p-main" role="tabpanel" aria-labelledby="t-main">
+    <div class="section">
+      <h2>Bio</h2>
+      <p class="bio">hey gng im james<br>i eat nazis<br>zelda is also pretty dope<br>minor(ity)<br>bye bye</p>
+      <p class="tz">TIME ZONE: MST<br><span id="mytime">--:--</span> ( my time ) = <mark id="yourtime">--:--</mark> ( your time )</p>
+    </div>
+
+    <div class="section">
+      <h2>Member Since</h2>
+      <p class="since">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm4 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm8 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+        Mar 20, 2021
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Connections</h2>
+      <div class="list">
+        <a class="row" href="https://github.com/scotcheroooo" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></span>
+          <span class="txt"><span class="label">scotcheroooo <svg class="check"><use href="#check"/></svg></span></span>
+          <svg class="arrow"><use href="#arrow"/></svg>
+        </a>
+        <!-- TODO: swap in your spotify profile link (open.spotify.com/user/...) -->
+        <a class="row" href="https://open.spotify.com/" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#1ed760"/><path d="M6.2 8.8c3.9-1.2 8.4-.8 11.8 1.2M6.8 12.2c3.2-1 6.9-.6 9.7 1M7.4 15.4c2.6-.7 5.3-.4 7.6.9" stroke="#121212" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></span>
+          <span class="txt"><span class="label">like actually james <svg class="check"><use href="#check"/></svg></span></span>
+          <svg class="arrow"><use href="#arrow"/></svg>
+        </a>
+        <a class="row" href="https://steamcommunity.com/id/scotcheroo" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#fff"/><circle cx="15.6" cy="9.2" r="3.4" fill="none" stroke="#1b2838" stroke-width="1.6"/><circle cx="15.6" cy="9.2" r="1.6" fill="#1b2838"/><circle cx="8.6" cy="15.6" r="2.4" fill="none" stroke="#1b2838" stroke-width="1.6"/><path d="M1 13.2l6 2.4M10.4 14.4l3.4-3.1" stroke="#1b2838" stroke-width="1.6"/></svg></span>
+          <span class="txt"><span class="label">scotcheroo <svg class="check"><use href="#check"/></svg></span><span class="sub">Member since Apr 10, 2023</span></span>
+          <svg class="arrow"><use href="#arrow"/></svg>
+        </a>
+        <a class="row" href="https://www.twitch.tv/scotcheroo_" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 2L2.5 6v14h5v3h3l3-3h4l5-5V2z" fill="#9146ff"/><path d="M6 4h14v10l-3 3h-4l-3 3v-3H6z" fill="#fff"/><path d="M11 7.5v5M16 7.5v5" stroke="#9146ff" stroke-width="2"/></svg></span>
+          <span class="txt"><span class="label">scotcheroo_ <svg class="check"><use href="#check"/></svg></span></span>
+          <svg class="arrow"><use href="#arrow"/></svg>
+        </a>
+        <a class="row" href="https://www.youtube.com/@simplypimby" target="_blank" rel="noopener">
+          <span class="ico"><svg viewBox="0 0 24 24"><rect x="1" y="4.5" width="22" height="15" rx="4.5" fill="#ff0033"/><path d="M10 8.6l5.6 3.4-5.6 3.4z" fill="#fff"/></svg></span>
+          <span class="txt"><span class="label">pimby <svg class="check"><use href="#check"/></svg></span></span>
+          <svg class="arrow"><use href="#arrow"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="note"><b>Note</b>blub blub. (if ur reading this, say hi in the server)</div>
+  </section>
+
+  <!-- LINKS (link tree) -->
+  <section class="panel" id="p-links" role="tabpanel" aria-labelledby="t-links" hidden>
+    <div class="tree">
+      <a href="https://www.youtube.com/@simplypimby" target="_blank" rel="noopener"><span class="emo">▶️</span><span class="txt"><div class="label">YouTube</div><div class="sub">@simplypimby</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://www.tiktok.com/@simplypimby" target="_blank" rel="noopener"><span class="emo">🎵</span><span class="txt"><div class="label">TikTok</div><div class="sub">@simplypimby</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://www.twitch.tv/scotcheroo_" target="_blank" rel="noopener"><span class="emo">📺</span><span class="txt"><div class="label">Twitch</div><div class="sub">scotcheroo_</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://www.instagram.com/scotcheroooo" target="_blank" rel="noopener"><span class="emo">📸</span><span class="txt"><div class="label">Instagram</div><div class="sub">scotcheroooo</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://discord.gg/A9hZaJjKem" target="_blank" rel="noopener"><span class="emo">💬</span><span class="txt"><div class="label">Discord server</div><div class="sub">come hang out</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://github.com/scotcheroooo" target="_blank" rel="noopener"><span class="emo">🐙</span><span class="txt"><div class="label">GitHub</div><div class="sub">scotcheroooo</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://steamcommunity.com/id/scotcheroo" target="_blank" rel="noopener"><span class="emo">🎮</span><span class="txt"><div class="label">Steam</div><div class="sub">scotcheroo</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="/"><span class="emo">🌐</span><span class="txt"><div class="label">pimby.fyi</div><div class="sub">the main site</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="mailto:scotcherooski@gmail.com"><span class="emo">✉️</span><span class="txt"><div class="label">Email</div><div class="sub">scotcherooski@gmail.com</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="panel" id="p-projects" role="tabpanel" aria-labelledby="t-projects" hidden>
+    <div class="tree">
+      <a href="https://commissions.scotch.quest" target="_blank" rel="noopener"><span class="emo">🛠️</span><span class="txt"><div class="label">Commissions</div><div class="sub">book a coded project with Butterscotch Development</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://streamschedule.org" target="_blank" rel="noopener"><span class="emo">🗓️</span><span class="txt"><div class="label">streamschedule.org</div><div class="sub">build and publish a customizable stream schedule</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://betterqr.scotch.quest" target="_blank" rel="noopener"><span class="emo">🔳</span><span class="txt"><div class="label">betterQR</div><div class="sub">dynamic QR codes with locks + scan analytics</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://wishyy.scotch.quest" target="_blank" rel="noopener"><span class="emo">🎁</span><span class="txt"><div class="label">wishyy</div><div class="sub">a multi-family gift list, so nobody doubles up</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://idea.scotch.quest" target="_blank" rel="noopener"><span class="emo">💡</span><span class="txt"><div class="label">idea.</div><div class="sub">a password-locked vault for notes and ideas</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://glep.club" target="_blank" rel="noopener"><span class="emo">😁</span><span class="txt"><div class="label">glep.club</div><div class="sub">a Smiling Friends fan site, blog, and gallery</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+      <a href="https://slimetutorials.com" target="_blank" rel="noopener"><span class="emo">🟢</span><span class="txt"><div class="label">slimetutorials.com</div><div class="sub">slime tutorials</div></span><svg class="arrow" width="20" height="20"><use href="#arrow"/></svg></a>
+    </div>
+  </section>
+
+  <footer>&copy; 2026 James Pliley · <a href="/">pimby.fyi</a></footer>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  // --- tabs ---
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    // restagger the link-tree entrance
+    document.querySelectorAll('#' + tab.getAttribute('aria-controls') + ' .tree a').forEach((a, i) => {
+      a.style.animation = 'none'; a.offsetHeight;
+      a.style.animation = ''; a.style.animationDelay = (i * 55) + 'ms';
+    });
+  }));
+
+  // --- live time zone line: "12:00 PM (my time) = X (your time)" ---
+  const fmt = (tz) => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: tz }).format(new Date());
+  function tick() {
+    document.getElementById('mytime').textContent = fmt('America/Denver');
+    document.getElementById('yourtime').textContent = fmt(undefined);
+  }
+  tick(); setInterval(tick, 15000);
+
+  // --- copy username ---
+  const toast = document.getElementById('toast');
+  function say(msg) { toast.textContent = msg; toast.classList.add('show'); clearTimeout(say.t); say.t = setTimeout(() => toast.classList.remove('show'), 1600); }
+  document.getElementById('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText('pimbypickle'); say('copied pimbypickle 🪼'); }
+    catch { say('username: pimbypickle'); }
+  });
+
+  // --- poke the duck ---
+  const duck = document.getElementById('duck');
+  duck.addEventListener('click', () => {
+    duck.classList.add('quack');
+    setTimeout(() => duck.classList.remove('quack'), 900);
+  });
+
+  // --- bubbles ---
+  const sea = document.querySelector('.sea');
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (let i = 0; i < 18; i++) {
+      const b = document.createElement('span');
+      const s = 4 + Math.random() * 10;
+      b.className = 'bubble';
+      b.style.cssText = `left:${Math.random() * 100}%;width:${s}px;height:${s}px;animation-duration:${10 + Math.random() * 14}s;animation-delay:${-Math.random() * 20}s;--sway:${(Math.random() * 60 - 30).toFixed(0)}px`;
+      sea.appendChild(b);
+    }
+  }
+</script>
+</body>
+</html>
